@@ -1,13 +1,13 @@
 const { Thoughts, Users } = require('../models');
 
 module.exports = {
-  // Get all courses
+  // Get all thoughts
   getThoughts(req, res) {
     Thoughts.find()
       .then((thoughts) => res.json(thoughts))
       .catch((err) => res.status(500).json(err));
   },
-  // Get a course
+  // Get a thought
   getSingleThought(req, res) {
     Thoughts.findOne({ _id: req.params.thoughtsId })
       .select('-__v')
@@ -18,7 +18,7 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
-  // Create a course
+  // Create thoughts
   createThoughts(req, res) {
     Thoughts.create(req.body)
       .then((thoughts) => res.json(thoughts))
@@ -27,7 +27,7 @@ module.exports = {
         return res.status(500).json(err);
       });
   },
-  // Delete a course
+  // Delete thoughts
   deleteThoughts(req, res) {
     Thoughts.findOneAndDelete({ _id: req.params.thoughtsId })
       .then((thoughts) =>
@@ -38,7 +38,7 @@ module.exports = {
       .then(() => res.json({ message: 'Thoughts and users deleted!' }))
       .catch((err) => res.status(500).json(err));
   },
-  // Update a course
+  // Update thoughts
   updateThoughts(req, res) {
     Thoughts.findOneAndUpdate(
       { _id: req.params.thoughtsId },
@@ -50,6 +50,31 @@ module.exports = {
           ? res.status(404).json({ message: 'No thoughts with this id!' })
           : res.json(thoughts)
       )
+      .catch((err) => res.status(500).json(err));
+  },
+
+  createReaction(req, res) {
+        Thoughts.findOneAndUpdate(
+          { _id: req.params.thoughtsId },
+          { $addToSet: { reactions: body } },
+          { runValidators: true, new: true }
+        )
+          .then((thoughts) =>
+            !thoughts
+              ? res.status(404).json({ message: 'No thoughts with this id!' })
+              : res.json(thoughts)
+          )
+          .catch((err) => res.status(500).json(err));
+      },
+
+  deleteReaction(req, res) {
+    Thoughts.findOneAndDelete(
+        { _id: req.params.thoughtsId },
+        { $pull: { reactions: { reactionId: params.reactionId } } },
+        { runValidators: true, new: true }
+        )
+    
+      .then((thoughts) => res.json(thoughts))
       .catch((err) => res.status(500).json(err));
   },
 };
