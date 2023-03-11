@@ -1,4 +1,4 @@
-const { Schema, Types } = require('mongoose');
+const { Schema, Types, model } = require('mongoose');
 
 
 const ReactionSchema = new Schema(
@@ -51,10 +51,6 @@ const thoughtsSchema = new Schema(
             // Use a getter method to format the timestamp on query
             get: (timestamp) => dateFormat(timestamp),
           },
-          username: {
-            type: String,
-            required: true,
-          },
 
           reactions: [ReactionSchema],
         
@@ -68,4 +64,6 @@ const thoughtsSchema = new Schema(
         }
       );
 
-module.exports = thoughtsSchema;
+const Thoughts = model('thoughts', thoughtsSchema);
+
+module.exports = Thoughts;
