@@ -15,7 +15,7 @@ module.exports = {
   },
   // Get a user
   getUsersById(req, res) {
-    Users.findOne({ _id: req.params.usersId })
+    Users.findOne({ _id: req.params.id })
       .populate({
         path: "thoughts",
         select: "-__v",
@@ -38,7 +38,7 @@ module.exports = {
   },
   // Delete users
   deleteUsers(req, res) {
-    Users.findOneAndDelete({ _id: params.usersId })
+    Users.findOneAndDelete({ _id: params.id })
       .then((users) =>
         !users
           ? res.status(404).json({ message: "No users with that ID" })
@@ -50,7 +50,7 @@ module.exports = {
   // Update users
   updateUsers(req, res) {
     Users.findOneAndUpdate(
-      { _id: req.params.usersId },
+      { _id: req.params.id },
       { $set: req.body },
       { runValidators: true, new: true }
     )
@@ -66,7 +66,7 @@ module.exports = {
     console.log('You are adding a friend');
     console.log(req.body);
     Users.findOneAndUpdate(
-      { _id: req.params.usersId },
+      { _id: req.params.id },
       { $addToSet: { friends: params.friendId } },
       { runValidators: true, new: true }
     )
@@ -80,7 +80,7 @@ module.exports = {
 
   removeFriend(req, res) {
     Users.findOneAndDelete(
-      { _id: req.params.usersId },
+      { _id: req.params.id },
       { $pull: { friends: params.friendId } },
       { runValidators: true, new: true }
     )
