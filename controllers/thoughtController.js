@@ -41,7 +41,7 @@ module.exports = {
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: 'No thoughts with that ID' })
-          : Users.findOneAndUpdate(
+          : User.findOneAndUpdate(
             { thoughts: req.params.thoughtId },
             { $pull: { thoughts: req.params.thoughtId } },
             { runValidators: true, new: true }
