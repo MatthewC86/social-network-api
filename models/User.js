@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 // Schema to create a course model
-const usersSchema = new Schema(
+const userSchema = new Schema(
     {
         username: {
           type: String,
@@ -19,13 +19,13 @@ const usersSchema = new Schema(
           thoughts: [
           {
             type: Schema.Types.ObjectId,
-            ref: "thoughts",
+            ref: "Thought",
           },
         ],
         friends: [
             {
               type: Schema.Types.ObjectId,
-              ref: "users",
+              ref: "User",
             },
           ],
         },
@@ -37,6 +37,10 @@ const usersSchema = new Schema(
         }
       );
 
-const Users = model('users', usersSchema);
+       userSchema.virtual("friendCount").get(function () {
+         return this.friends.length;
+       });
 
-module.exports = Users;
+const User = model('User', userSchema);
+
+module.exports = User;
